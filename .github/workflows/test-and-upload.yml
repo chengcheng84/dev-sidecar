@@ -146,6 +146,10 @@ jobs:
           echo "--------------------";
           pnpm install;
 
+      - name: lint
+        run: |
+          pnpm lint;
+
       - name: test packages/core
         run: |
           cd packages/core;
