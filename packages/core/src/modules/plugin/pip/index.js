@@ -1,7 +1,7 @@
 const pipConfig = require('./config')
 
-const PipPlugin = function (context) {
-  const { config, shell, event, log } = context
+function PipPlugin (context) {
+  const { config, shell } = context
   const api = {
     async start () {
       await api.setRegistry({ registry: config.get().plugin.pip.setting.registry })
@@ -16,7 +16,7 @@ const PipPlugin = function (context) {
       await api.start()
     },
 
-    async save (newConfig) {
+    async save (_newConfig) {
     },
 
     async getPipEnv () {
@@ -74,7 +74,7 @@ const PipPlugin = function (context) {
       return true
     },
 
-    async setProxy (ip, port) {
+    async setProxy (_ip, _port) {
     },
 
     async unsetProxy () {

@@ -7,7 +7,7 @@ function install (app, api) {
   api.ipc.on('close.showTip', (event, message) => {
     console.info('ipc channel: "close.showTip", event:', event, ', message:', message)
     function onRadioChange (e) {
-      closeType = parseInt(e.target.value)
+      closeType = Number.parseInt(e.target.value)
     }
     function onCheckChange (e) {
       doSave = e.target.checked
@@ -23,9 +23,11 @@ function install (app, api) {
     const content = h('div', {}, [
       h('div', { style: { marginTop: '10px' } }, [
         h(ARadioGroup, {
-          value: closeType,
-          'onUpdate:value': (val) => { closeType = val },
-          onChange: onRadioChange,
+          'value': closeType,
+          'onUpdate:value': (val) => {
+            closeType = val
+          },
+          'onChange': onRadioChange,
         }, [
           h(ARadio, { value: 1 }, '直接关闭'),
           h(ARadio, { value: 2 }, '最小化到系统托盘'),
@@ -33,9 +35,11 @@ function install (app, api) {
       ]),
       h('div', { style: { marginTop: '10px' } }, [
         h(ACheckbox, {
-          checked: doSave,
-          'onUpdate:checked': (val) => { doSave = val },
-          onChange: onCheckChange,
+          'checked': doSave,
+          'onUpdate:checked': (val) => {
+            doSave = val
+          },
+          'onChange': onCheckChange,
         }, '记住本次选择，不再提示'),
       ]),
       h('div', { style: { marginTop: '20px' } }, [

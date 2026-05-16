@@ -60,7 +60,7 @@ function getLastModifiedTimeFromIfModifiedSince (rOptions, log) {
 module.exports = {
   name: 'cacheRequest',
   priority: 104,
-  requestIntercept (context, interceptOpt, req, res, ssl, next) {
+  requestIntercept (context, interceptOpt, req, res, _ssl, _next) {
     const { rOptions, log } = context
 
     if (rOptions.method !== 'GET') {

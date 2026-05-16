@@ -1,7 +1,7 @@
 module.exports = {
   name: 'unVerifySsl',
   priority: 124,
-  requestIntercept (context, interceptOpt, req, res, ssl, next) {
+  requestIntercept (context, interceptOpt, req, res, _ssl, _next) {
     const { rOptions, log } = context
 
     if (rOptions.agent && rOptions.agent.options.rejectUnauthorized && rOptions.agent.unVerifySslAgent) {

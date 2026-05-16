@@ -94,9 +94,7 @@ module.exports = {
 
     // 创建预设IP的DNS
     dnsMap.PreSet = new DNSOverPreSetIpList(preSetIpList)
-    if (dnsMap.ForSNI == null) {
-      dnsMap.ForSNI = dnsMap.PreSet
-    }
+    dnsMap.ForSNI ??= dnsMap.PreSet
 
     log.info(`设置SNI默认使用的DNS为 '${dnsMap.ForSNI.dnsName}'（注：当某个域名配置了SNI但未配置DNS时，将默认使用该DNS）`)
 

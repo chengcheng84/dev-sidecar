@@ -20,7 +20,7 @@ const mitmproxyPath = path.join(__dirname, '../mitmproxy.js')
 process.env.DS_EXTRA_PATH = path.join(app.getAppPath(), 'extra')
 let currentWin
 
-const getDefaultConfigBasePath = function () {
+function getDefaultConfigBasePath () {
   return DevSidecar.api.config.get().server.setting.userBasePath
 }
 
@@ -105,24 +105,18 @@ const localApi = {
         } catch (e) {
           log.error('读取 setting.json 失败:', settingPath, ', error:', e)
         }
-        if (setting == null) {
-          setting = {}
-        }
+        setting ??= {}
       }
-      if (setting.overwall == null) {
-        setting.overwall = false
-      }
+      setting.overwall ??= false
 
       if (setting.installTime == null) {
         // 设置安装时间
         setting.installTime = dateUtil.now()
 
         // 初始化 rootCa.setuped
-        if (setting.rootCa == null) {
-          setting.rootCa = {
-            setuped: false,
-            desc: '根证书未安装',
-          }
+        setting.rootCa ??= {
+          setuped: false,
+          desc: '根证书未安装',
         }
 
         // 保存 setting.json
@@ -180,7 +174,7 @@ const localApi = {
   server: {
     /**
      * 启动代理服务
-     * @returns {Promise<{port: *}>}
+     * @returns {Promise<{port: *}>} 启动结果
      */
     start () {
       return DevSidecar.api.server.start({ mitmproxyPath })
@@ -198,7 +192,7 @@ const localApi = {
 function _deepFindFunction (list, parent, parentKey) {
   for (const key in parent) {
     const item = parent[key]
-    if (item instanceof Function) {
+    if (typeof item === 'function') {
       list.push(parentKey + key)
     } else if (item instanceof Object) {
       _deepFindFunction(list, item, `${parentKey + key}.`)
@@ -224,9 +218,7 @@ function _getSettingsPath () {
 
 function invoke (api, param) {
   let target = lodash.get(localApi, api)
-  if (target == null) {
-    target = lodash.get(DevSidecar.api, api)
-  }
+  target ??= lodash.get(DevSidecar.api, api)
   if (target == null) {
     log.info('找不到此接口方法：', api)
   }

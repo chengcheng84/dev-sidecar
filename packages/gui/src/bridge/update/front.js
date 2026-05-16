@@ -72,14 +72,14 @@ function install (app, api) {
     api.ipc.openExternal('https://github.com/docmirror/dev-sidecar/releases')
   }
 
-  function goManualUpdate (value) {
+  function goManualUpdate (_value) {
     updateParams.newVersion = false
     app.config.globalProperties.$confirm({
       title: '暂不提供自动升级',
       cancelText: '取消',
       okText: '打开链接',
       width: 420,
-      content: (h) => {
+      content: () => {
         return (
           <div>
             <div>
@@ -150,7 +150,7 @@ function install (app, api) {
       cancelText: '暂不升级',
       okText: '升级',
       width: 700,
-      content: (h) => {
+      content: () => {
         if (value.releaseNotes) {
           const notes = []
           if (typeof value.releaseNotes === 'string') {
@@ -202,7 +202,7 @@ function install (app, api) {
       cancelText: '暂不升级',
       okText: '立即升级',
       width: 700,
-      content: (h) => {
+      content: () => {
         if (value.releaseNotes) {
           const notes = []
           if (typeof value.releaseNotes === 'string') {

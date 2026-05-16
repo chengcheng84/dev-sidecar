@@ -1,13 +1,13 @@
 <script>
 import { ipcRenderer } from 'electron'
-import { ProfileOutlined, SyncOutlined, CheckOutlined } from '@ant-design/icons-vue'
+import { CheckOutlined, ProfileOutlined, SyncOutlined } from '@ant-design/icons-vue'
 import Plugin from '../mixins/plugin'
 import { colorTheme } from '../composables/theme'
 
 export default {
   name: 'Setting',
-  mixins: [Plugin],
   components: { ProfileOutlined, SyncOutlined, CheckOutlined },
+  mixins: [Plugin],
   data () {
     return {
       key: 'app',
@@ -172,7 +172,7 @@ export default {
       }
 
       // 如果以上按钮都没有按下，并且当前键不是F1、F2、F4、F6~F11时，则直接返回（注：F5已经是刷新页面快捷键、F12已经是打开DevTools的快捷键了）
-      if (shortcut === '' && !key.match(/^F([1246-9]|1[01])$/g)) {
+      if (shortcut === '' && !/^F(?:[1246-9]|1[01])$/.test(key)) {
         this.config.app.showHideShortcut = '无'
         return
       }
@@ -282,8 +282,8 @@ export default {
               h('span', '默认配置'),
               '及',
               h('span', '远程配置'),
-              '，请谨慎操作！！！'
-            ])
+              '，请谨慎操作！！！',
+            ]),
           ]),
           h('hr'),
           h('div', [
@@ -294,9 +294,9 @@ export default {
               h('br'),
               '2. 将该备份文件重命名为',
               h('span', 'config.json'),
-              '，再重启软件即可恢复个性化配置。'
-            ])
-          ])
+              '，再重启软件即可恢复个性化配置。',
+            ]),
+          ]),
         ]),
         cancelText: '取消',
         okText: '确定',
@@ -344,7 +344,9 @@ export default {
       设置
     </template>
     <template #header-right>
-      <a-button class="mr10" @click="openLog()"><ProfileOutlined />查看日志</a-button>
+      <a-button class="mr10" @click="openLog()">
+        <ProfileOutlined />查看日志
+      </a-button>
     </template>
 
     <div v-if="config">
@@ -526,6 +528,5 @@ export default {
         </a-button>
       </div>
     </template>
-
   </ds-container>
 </template>

@@ -1,5 +1,5 @@
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'TreeNode',
@@ -13,7 +13,7 @@ export default defineComponent({
       await this.$api.ipc.openExternal(url)
     },
   },
-});
+})
 </script>
 
 <template>

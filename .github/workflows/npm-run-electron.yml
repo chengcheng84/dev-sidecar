@@ -1,4 +1,4 @@
-name: "npm run electron"
+name: npm run electron
 
 on:
   push:
@@ -7,11 +7,11 @@ on:
       - test*
       - release*
     paths-ignore:
-      - "_script/**"
-      - "doc/**"
-      - "**/*.md"
-      - "**/.gitignore"
-      - "**/LICENSE"
+      - '_script/**'
+      - 'doc/**'
+      - '**/*.md'
+      - '**/.gitignore'
+      - '**/LICENSE'
   workflow_dispatch:
 
 jobs:
@@ -31,13 +31,13 @@ jobs:
         node:
           - 22
     steps:
-      - name: "Checkout"
+      - name: Checkout
         uses: actions/checkout@v4.1.7
         with:
           submodules: true
           fetch-depth: 0
 
-      - name: "Setup pnpm"
+      - name: Setup pnpm
         uses: pnpm/action-setup@v4
 
       - name: 'Setup Node.js "${{ matrix.node }}.x" environment'
@@ -47,18 +47,18 @@ jobs:
           registry-url: https://npm.pkg.github.com/
           cache: pnpm
 
-      - name: "Setup Python environment, because of electron-builder install-app-deps requires Python setup tools"
+      - name: 'Setup Python environment, because of electron-builder install-app-deps requires Python setup tools'
         uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: '3.10'
 
-      - name: "Print"
+      - name: Print
         run: |
           echo "github.ref_type = ${{ github.ref_type }}";
           echo "github.ref = ${{ github.ref }}";
           echo "github.ref_name = ${{ github.ref_name }}";
 
-      - name: "npm -v | pnpm -v | python --version"
+      - name: 'npm -v | pnpm -v | python --version'
         run: |
           echo "======================================================================";
           echo "npm -v";
@@ -75,7 +75,7 @@ jobs:
           echo "--------------------";
           python --version;
 
-      - name: "Setup electron cache"
+      - name: Setup electron cache
         uses: actions/cache@v4
         with:
           path: ${{ github.workspace }}/.cache/electron
@@ -83,7 +83,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-electron-cache-
 
-      - name: "Setup electron-builder cache"
+      - name: Setup electron-builder cache
         uses: actions/cache@v4
         with:
           path: ${{ github.workspace }}/.cache/electron-builder
@@ -91,18 +91,18 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-electron-builder-cache-
 
-      - name: "Set C++17 compiler flags (Linux / macOS)"
+      - name: 'Set C++17 compiler flags (Linux / macOS)'
         if: ${{ matrix.os != 'windows' }}
         run: |
           echo "CXXFLAGS=-std=c++17" >> $GITHUB_ENV
           echo "CFLAGS=-std=c11" >> $GITHUB_ENV
 
-      - name: "Set C++17 compiler flags (Windows)"
+      - name: 'Set C++17 compiler flags (Windows)'
         if: ${{ matrix.os == 'windows' }}
         run: |
           echo "CL=/std:c++17" >> $env:GITHUB_ENV
 
-      - name: "pnpm install"
+      - name: pnpm install
         run: |
           echo "======================================================================";
           dir || ls -lah;
@@ -112,7 +112,7 @@ jobs:
           echo "--------------------";
           pnpm install;
 
-      - name: "npm run electron"
+      - name: npm run electron
         working-directory: packages/gui
         run: |
           echo "======================================================================";

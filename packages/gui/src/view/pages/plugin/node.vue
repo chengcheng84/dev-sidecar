@@ -1,19 +1,18 @@
 <script>
-import { defineComponent } from 'vue';
-
+import { defineComponent } from 'vue'
 
 import { CheckOutlined, ExclamationCircleOutlined, SyncOutlined } from '@ant-design/icons-vue'
 import Plugin from '../../mixins/plugin'
 
 export default defineComponent({
   name: 'Node',
-  mixins: [Plugin],
 
   components: {
     CheckOutlined,
     ExclamationCircleOutlined,
     SyncOutlined,
   },
+  mixins: [Plugin],
 
   data () {
     return {
@@ -60,7 +59,7 @@ export default defineComponent({
       })
     },
   },
-});
+})
 </script>
 
 <template>

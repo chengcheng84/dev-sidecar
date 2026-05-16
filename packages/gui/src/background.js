@@ -38,7 +38,6 @@ try {
 
 let hideDockWhenWinClose = DevSidecar.api.config.get().app.dock.hideWhenWinClose || false
 
-
 function openDevTools () {
   try {
     log.debug('尝试打开 `开发者工具`')

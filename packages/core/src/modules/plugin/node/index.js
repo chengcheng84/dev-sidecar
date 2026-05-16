@@ -1,7 +1,7 @@
 const jsonApi = require('@docmirror/mitmproxy/src/json')
 const nodeConfig = require('./config')
 
-const NodePlugin = function (context) {
+function NodePlugin (context) {
   const { config, shell, event, log } = context
   const nodeApi = {
     async start () {
@@ -26,7 +26,7 @@ const NodePlugin = function (context) {
       await nodeApi.start()
     },
 
-    async save (newConfig) {
+    async save (_newConfig) {
       await nodeApi.setVariables()
     },
     async getNpmEnv () {

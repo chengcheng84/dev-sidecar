@@ -1,7 +1,7 @@
 module.exports = {
   name: 'sni',
   priority: 123,
-  requestIntercept (context, interceptOpt, req, res, ssl, next) {
+  requestIntercept (context, interceptOpt, req, res, _ssl, _next) {
     const { rOptions, log } = context
 
     let unVerifySsl = rOptions.agent && rOptions.agent.options.rejectUnauthorized === false

@@ -36,9 +36,7 @@ module.exports = function createRequestHandler (createIntercepts, middlewares, e
       setting,
     }
     let interceptors = createIntercepts(context)
-    if (interceptors == null) {
-      interceptors = []
-    }
+    interceptors ??= []
     const reqIncpts = interceptors.filter((item) => {
       return item.requestIntercept != null
     })

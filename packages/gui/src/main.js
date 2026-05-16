@@ -1,6 +1,6 @@
 import antd from 'ant-design-vue'
-import { createApp } from 'vue';
-import { createRouter, createWebHashHistory } from 'vue-router';
+import { createApp } from 'vue'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import { ipcRenderer } from 'electron'
 import view from './view'
 import App from './view/App.vue'
@@ -29,11 +29,11 @@ try {
     routes, // (缩写) 相当于 routes: routes
   })
   const app = createApp(App)
-  
+
   app.use(antd)
   app.use(router)
   app.component('DsContainer', DsContainer)
-  
+
   view.initApi(app).then(async (api) => {
     // 初始化status
     try {

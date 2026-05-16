@@ -4,7 +4,7 @@ module.exports = {
   name: 'AfterOPTIONSHeaders',
   desc: '开启了options.js功能时，正常请求时，会需要增加响应头 `Access-Control-Allow-Origin: xxx`',
   priority: 201,
-  responseIntercept (context, interceptOpt, req, res, proxyReq, proxyRes, ssl, next) {
+  responseIntercept (context, interceptOpt, req, res, proxyReq, proxyRes, _ssl, _next) {
     const { rOptions, log } = context
 
     if (rOptions.method === 'OPTIONS' || !rOptions.headers.origin) {

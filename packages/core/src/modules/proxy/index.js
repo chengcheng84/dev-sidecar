@@ -1,4 +1,4 @@
-const ProxyPlugin = function (context) {
+function ProxyPlugin (context) {
   const { config, event, shell, log } = context
   const api = {
     async start () {

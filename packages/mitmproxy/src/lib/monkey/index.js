@@ -82,7 +82,7 @@ function loadScript (content, scriptName) {
     script: '',
   }
   for (const string of confItemArr) {
-    const reg = new RegExp('.*@(\\S+)\\s(.+)')
+    const reg = /@(\S+)\s(.+)/
     const ret = string.match(reg)
     if (ret) {
       const key = ret[1].trim()

@@ -1,7 +1,7 @@
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue'
 
-import { PlusOutlined, MinusOutlined, SyncOutlined, CheckOutlined } from '@ant-design/icons-vue'
+import { CheckOutlined, MinusOutlined, PlusOutlined, SyncOutlined } from '@ant-design/icons-vue'
 import Plugin from '../../mixins/plugin'
 
 export default defineComponent({
@@ -120,7 +120,7 @@ export default defineComponent({
       this.config.plugin.overwall.server = map
     },
   },
-});
+})
 </script>
 
 <template>
@@ -129,7 +129,9 @@ export default defineComponent({
       梯子
     </template>
     <template #header-right>
-      <a-button type="primary" @click="openExternal('https://github.com/docmirror/dev-sidecar-doc/blob/main/ow.md')">原理说明</a-button>
+      <a-button type="primary" @click="openExternal('https://github.com/docmirror/dev-sidecar-doc/blob/main/ow.md')">
+        原理说明
+      </a-button>
     </template>
 
     <div v-if="config">
@@ -176,7 +178,9 @@ export default defineComponent({
                 <span>PAC没有拦截到的域名，可以在此处定义；配置为<code>禁用</code>时，将不使用梯子</span>
               </a-col>
               <a-col :span="2">
-                <a-button type="primary" @click="addTarget()"><PlusOutlined /></a-button>
+                <a-button type="primary" @click="addTarget()">
+                  <PlusOutlined />
+                </a-button>
               </a-col>
             </a-row>
             <a-row v-for="(item, index) of targets" ref="targets" :key="index" :gutter="10">
@@ -191,7 +195,9 @@ export default defineComponent({
                 </a-select>
               </a-col>
               <a-col :span="2">
-                <a-button type="danger" @click="deleteTarget(item, index)"><MinusOutlined /></a-button>
+                <a-button type="danger" @click="deleteTarget(item, index)">
+                  <MinusOutlined />
+                </a-button>
               </a-col>
             </a-row>
           </div>
@@ -203,7 +209,9 @@ export default defineComponent({
                 <span>Nginx二层代理服务端配置</span>
               </a-col>
               <a-col :span="2">
-                <a-button type="primary" @click="addServer()"><PlusOutlined /></a-button>
+                <a-button type="primary" @click="addServer()">
+                  <PlusOutlined />
+                </a-button>
               </a-col>
             </a-row>
             <a-row v-for="(item, index) of servers" ref="servers" :key="index" :gutter="10">
@@ -220,7 +228,9 @@ export default defineComponent({
                 <a-input v-model:value="item.value.password" addon-before="密码" type="password" placeholder="password" spellcheck="false" />
               </a-col>
               <a-col :span="2">
-                <a-button type="danger" @click="deleteServer(item, index)"><MinusOutlined /></a-button>
+                <a-button type="danger" @click="deleteServer(item, index)">
+                  <MinusOutlined />
+                </a-button>
               </a-col>
             </a-row>
             <div class="form-help">

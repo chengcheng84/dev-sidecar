@@ -1,7 +1,7 @@
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue'
 
-import { PlusOutlined, MinusOutlined, SyncOutlined, CheckOutlined } from '@ant-design/icons-vue'
+import { CheckOutlined, MinusOutlined, PlusOutlined, SyncOutlined } from '@ant-design/icons-vue'
 import Plugin from '../mixins/plugin'
 
 export default defineComponent({
@@ -86,7 +86,7 @@ export default defineComponent({
       this.config.proxy.excludeIpList = excludeIpList
     },
   },
-});
+})
 </script>
 
 <template>
@@ -170,7 +170,9 @@ export default defineComponent({
             <span>国内域名不包含的域名，可以在此处定义；配置为 <code>不排除</code>时，将被代理</span>
           </a-col>
           <a-col :span="2">
-            <a-button type="primary" @click="addExcludeIp()"><PlusOutlined /></a-button>
+            <a-button type="primary" @click="addExcludeIp()">
+              <PlusOutlined />
+            </a-button>
           </a-col>
         </a-row>
         <a-row v-for="(item, index) of excludeIpList" ref="excludeIpList" :key="index" :gutter="10" class="fine-tuning">
@@ -185,7 +187,9 @@ export default defineComponent({
             </a-select>
           </a-col>
           <a-col :span="2">
-            <a-button type="danger" @click="delExcludeIp(item, index)"><MinusOutlined /></a-button>
+            <a-button type="danger" @click="delExcludeIp(item, index)">
+              <MinusOutlined />
+            </a-button>
           </a-col>
         </a-row>
       </a-form-item>
@@ -202,9 +206,9 @@ export default defineComponent({
     </template>
 
     <a-drawer
+      v-model:open="loopbackVisible"
       placement="right"
       :closable="false"
-      v-model:open="loopbackVisible"
       width="660px"
       height="100%"
       wrap-class-name="json-wrapper"

@@ -2,9 +2,7 @@ const listener = {}
 let index = 1
 function register (channel, handle, order = 10) {
   let handles = listener[channel]
-  if (handles == null) {
-    handles = listener[channel] = []
-  }
+  handles ??= listener[channel] = []
   handles.push({ id: index, handle, order })
   handles.sort((a, b) => {
     return a.order - b.order

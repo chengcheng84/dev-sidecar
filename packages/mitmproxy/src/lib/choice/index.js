@@ -104,9 +104,7 @@ class DynamicChoice {
    */
   doCount (ip, isError) {
     let count = this.countMap[ip]
-    if (count == null) {
-      count = this.countMap[ip] = { value: ip, total: 5, error: 0, keepErrorCount: 0, successRate: 1 }
-    }
+    count ??= this.countMap[ip] = { value: ip, total: 5, error: 0, keepErrorCount: 0, successRate: 1 }
 
     if (isError) {
       count.error++ // 失败次数+1

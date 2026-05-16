@@ -92,10 +92,7 @@ module.exports = class BaseDNS {
 
       const t = Date.now()
       let ipList = await this._lookupWithPreSetIpList(hostname, options)
-      if (ipList == null) {
-        // 没有获取到ip
-        ipList = []
-      }
+      ipList ??= []
       ipList.push(hostname) // 把原域名加入到统计里去
 
       ipCache.setBackupList(ipList)
@@ -115,7 +112,7 @@ module.exports = class BaseDNS {
         }
       }
 
-      return ip != null ? ip : hostname
+      return ip ?? hostname
     } catch (error) {
       log.error(`[DNS-over-${this.dnsType} '${this.dnsName}'] cannot resolve hostname ${hostname}, error:`, error)
       return hostname
@@ -184,9 +181,7 @@ module.exports = class BaseDNS {
   }
 
   _doDnsQuery (hostname, type = 'A', start) {
-    if (start == null) {
-      start = Date.now()
-    }
+    start ??= Date.now()
 
     return new Promise((resolve, reject) => {
       // 设置超时任务

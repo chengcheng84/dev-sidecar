@@ -121,7 +121,7 @@ const contextPath = '/____ds_script____/'
 const monkey = require('../../monkey')
 
 module.exports = {
-  requestIntercept (context, req, res, ssl, next) {
+  requestIntercept (context, req, res, _ssl, _next) {
     const { rOptions, log, setting } = context
     if (rOptions.path.indexOf(contextPath) !== 0) {
       return

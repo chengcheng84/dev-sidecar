@@ -1,15 +1,15 @@
-name: "Build And Release"
+name: Build And Release
 
 on:
   push:
     branches:
       - release*
     paths-ignore:
-      - "_script/**"
-      - "doc/**"
-      - "**/*.md"
-      - "**/.gitignore"
-      - "**/LICENSE"
+      - '_script/**'
+      - 'doc/**'
+      - '**/*.md'
+      - '**/.gitignore'
+      - '**/LICENSE'
   workflow_dispatch:
 
 jobs:
@@ -30,13 +30,13 @@ jobs:
         node:
           - 22
     steps:
-      - name: "Checkout"
+      - name: Checkout
         uses: actions/checkout@v4.1.7
         with:
           submodules: true
           fetch-depth: 0
 
-      - name: "Setup pnpm"
+      - name: Setup pnpm
         uses: pnpm/action-setup@v4
 
       - name: 'Setup Node.js "${{ matrix.node }}.x" environment'
@@ -46,25 +46,25 @@ jobs:
           registry-url: https://npm.pkg.github.com/
           cache: pnpm
 
-      - name: "Setup Python environment, because of electron-builder install-app-deps requires Python setup tools"
+      - name: 'Setup Python environment, because of electron-builder install-app-deps requires Python setup tools'
         uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: '3.10'
 
-      - name: "Get package info"
+      - name: Get package info
         id: package-info
         uses: luizfelipelaviola/get-package-info@v1
         with:
           path: ./packages/gui
 
-      - name: "Print"
+      - name: Print
         run: |
           echo "version = ${{ steps.package-info.outputs.version }}";
           echo "github.ref_type = ${{ github.ref_type }}";
           echo "github.ref = ${{ github.ref }}";
           echo "github.ref_name = ${{ github.ref_name }}";
 
-      - name: "npm -v | pnpm -v | python --version"
+      - name: 'npm -v | pnpm -v | python --version'
         run: |
           echo "======================================================================";
           echo "npm -v";
@@ -81,7 +81,7 @@ jobs:
           echo "--------------------";
           python --version;
 
-      - name: "Setup electron cache"
+      - name: Setup electron cache
         uses: actions/cache@v4
         with:
           path: ${{ github.workspace }}/.cache/electron
@@ -89,7 +89,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-electron-cache-
 
-      - name: "Setup electron-builder cache"
+      - name: Setup electron-builder cache
         uses: actions/cache@v4
         with:
           path: ${{ github.workspace }}/.cache/electron-builder
@@ -97,13 +97,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-electron-builder-cache-
 
-      - name: "Set C++17 compiler flags (non-Windows)"
+      - name: 'Set C++17 compiler flags (non-Windows)'
         if: ${{ matrix.os != 'windows' }}
         run: |
           echo "CXXFLAGS=-std=c++17" >> $GITHUB_ENV
           echo "CFLAGS=-std=c11" >> $GITHUB_ENV
 
-      - name: "Set C++17 compiler flags (Windows)"
+      - name: 'Set C++17 compiler flags (Windows)'
         if: ${{ matrix.os == 'windows' }}
         run: |
           echo "CL=/std:c++17" >> $env:GITHUB_ENV
@@ -118,17 +118,17 @@ jobs:
           echo "--------------------";
           pnpm install;
 
-      - name: "test packages/core"
+      - name: test packages/core
         run: |
           cd packages/core;
           pnpm run test;
 
-      - name: "test packages/mitmproxy"
+      - name: test packages/mitmproxy
         run: |
           cd packages/mitmproxy;
           pnpm run test;
 
-      - name: "Cache Flatpak runtime (Linux)"
+      - name: Cache Flatpak runtime (Linux)
         if: ${{ matrix.os == 'ubuntu' }}
         id: cache-flatpak-runtime
         uses: actions/cache@v4
@@ -136,7 +136,7 @@ jobs:
           path: ~/.local/share/flatpak
           key: flatpak-runtime-freedesktop-21.08
 
-      - name: "Install Flatpak tooling (Linux)"
+      - name: Install Flatpak tooling (Linux)
         if: ${{ matrix.os == 'ubuntu' }}
         run: |
           sudo apt-get update -y
@@ -152,7 +152,7 @@ jobs:
           flatpak --version
           flatpak-builder --version
 
-      - name: "Cache Flatpak runtime (Linux ARM64)"
+      - name: Cache Flatpak runtime (Linux ARM64)
         if: ${{ matrix.os == 'ubuntu-24.04-arm' }}
         id: cache-flatpak-runtime-linux-arm64
         uses: actions/cache@v4
@@ -160,7 +160,7 @@ jobs:
           path: ~/.local/share/flatpak
           key: flatpak-runtime-freedesktop-21.08
 
-      - name: "Install Flatpak tooling (Linux ARM64)"
+      - name: Install Flatpak tooling (Linux ARM64)
         if: ${{ matrix.os == 'ubuntu-24.04-arm' }}
         run: |
           sudo apt-get update -y
@@ -176,7 +176,7 @@ jobs:
           flatpak --version
           flatpak-builder --version
 
-      - name: "Special preparation for Linux ARM64 build"
+      - name: Special preparation for Linux ARM64 build
         if: ${{ matrix.os == 'ubuntu-24.04-arm' }}
         run: |
           echo "======================================================================";
@@ -184,7 +184,7 @@ jobs:
           echo "--------------------";
           bash _script/linux-arm64-prepare.sh;
 
-      - name: "npm run electron:build (Windows/macOS)"
+      - name: 'npm run electron:build (Windows/macOS)'
         if: ${{ matrix.os != 'ubuntu' }}
         run: |
           echo "======================================================================";
@@ -198,10 +198,10 @@ jobs:
           echo "--------------------";
           npm run electron:build;
 
-      - name: "npm run electron:build (Linux & Linux ARM64)"
+      - name: 'npm run electron:build (Linux & Linux ARM64)'
         if: ${{ matrix.os == 'ubuntu' || matrix.os == 'ubuntu-24.04-arm' }}
         env:
-          DEBUG: "@malept/flatpak-bundler"
+          DEBUG: '@malept/flatpak-bundler'
         run: |
           echo "======================================================================";
           echo "cd packages/gui";
@@ -223,7 +223,7 @@ jobs:
           dir || ls -lah;
 
       # Rename artifacts
-      - name: "Rename artifacts - Windows"
+      - name: Rename artifacts - Windows
         if: ${{ matrix.os == 'windows' }}
         run: |
           cd packages/gui/dist_electron;
@@ -231,7 +231,7 @@ jobs:
           ren DevSidecar-${{ steps.package-info.outputs.version }}-ia32.exe  DevSidecar-${{ steps.package-info.outputs.version }}-windows-ia32.exe;
           ren DevSidecar-${{ steps.package-info.outputs.version }}-arm64.exe DevSidecar-${{ steps.package-info.outputs.version }}-windows-arm64.exe;
           dir;
-      - name: "Rename artifacts - Linux"
+      - name: Rename artifacts - Linux
         if: ${{ matrix.os == 'ubuntu' }}
         run: |
           cd packages/gui/dist_electron;
@@ -253,14 +253,14 @@ jobs:
           mv DevSidecar-${{ steps.package-info.outputs.version }}-armv7l.rpm      DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.rpm;
           # armv7l flatpak is on Linux ARM64 runner
           ls -lah;
-      - name: "Rename artifacts - Linux ARM64"
+      - name: Rename artifacts - Linux ARM64
         if: ${{ matrix.os == 'ubuntu-24.04-arm' }}
         run: |
           mv DevSidecar-${{ steps.package-info.outputs.version }}-arm64.flatpak      DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.flatpak;
           #-------------------------------------------------------------------------------------------------------------------------
           mv DevSidecar-${{ steps.package-info.outputs.version }}-armv7l.flatpak      DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.flatpak;
           ls -lah;
-      - name: "Rename artifacts - macOS"
+      - name: Rename artifacts - macOS
         if: ${{ matrix.os == 'macos' }}
         run: |
           cd packages/gui/dist_electron;
@@ -270,57 +270,57 @@ jobs:
           ls -lah;
 
       # region Upload artifacts - Windows
-      - name: "Upload DevSidecar-${{ steps.package-info.outputs.version }}-windows-x86_64.exe"
+      - name: 'Upload DevSidecar-${{ steps.package-info.outputs.version }}-windows-x86_64.exe'
         uses: actions/upload-artifact@v4.4.0
         if: ${{ matrix.os == 'windows' }}
         with:
           path: packages/gui/dist_electron/DevSidecar-${{ steps.package-info.outputs.version }}-windows-x86_64.exe
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-windows-x86_64.exe"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-windows-x86_64.exe'
           if-no-files-found: error
-      - name: "Upload DevSidecar-${{ steps.package-info.outputs.version }}-windows-ia32.exe"
+      - name: 'Upload DevSidecar-${{ steps.package-info.outputs.version }}-windows-ia32.exe'
         uses: actions/upload-artifact@v4.4.0
         if: ${{ matrix.os == 'windows' }}
         with:
           path: packages/gui/dist_electron/DevSidecar-${{ steps.package-info.outputs.version }}-windows-ia32.exe
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-windows-ia32.exe"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-windows-ia32.exe'
           if-no-files-found: error
-      - name: "Upload DevSidecar-${{ steps.package-info.outputs.version }}-windows-arm64.exe"
+      - name: 'Upload DevSidecar-${{ steps.package-info.outputs.version }}-windows-arm64.exe'
         uses: actions/upload-artifact@v4.4.0
         if: ${{ matrix.os == 'windows' }}
         with:
           path: packages/gui/dist_electron/DevSidecar-${{ steps.package-info.outputs.version }}-windows-arm64.exe
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-windows-arm64.exe"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-windows-arm64.exe'
           if-no-files-found: error
       # endregion Upload artifacts - Windows
 
       # region Upload artifacts - Linux
-      - name: "Upload DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.deb"
+      - name: 'Upload DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.deb'
         uses: actions/upload-artifact@v4.4.0
         if: ${{ matrix.os == 'ubuntu' }}
         with:
           path: packages/gui/dist_electron/DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.deb
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.deb"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.deb'
           if-no-files-found: error
-      - name: "Upload DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.AppImage"
+      - name: 'Upload DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.AppImage'
         uses: actions/upload-artifact@v4.4.0
         if: ${{ matrix.os == 'ubuntu' }}
         with:
           path: packages/gui/dist_electron/DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.AppImage
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.AppImage"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.AppImage'
           if-no-files-found: error
-      - name: "Upload DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.tar.gz"
+      - name: 'Upload DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.tar.gz'
         uses: actions/upload-artifact@v4.4.0
         if: ${{ matrix.os == 'ubuntu' }}
         with:
           path: packages/gui/dist_electron/DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.tar.gz
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.tar.gz"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.tar.gz'
           if-no-files-found: error
-      - name: "Upload DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.rpm"
+      - name: 'Upload DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.rpm'
         uses: actions/upload-artifact@v4.4.0
         if: ${{ matrix.os == 'ubuntu' }}
         with:
           path: packages/gui/dist_electron/DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.rpm
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.rpm"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.rpm'
           if-no-files-found: error
       # - name: "Upload DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.flatpak"
       #   uses: actions/upload-artifact@v4.4.0
@@ -331,105 +331,105 @@ jobs:
       #     if-no-files-found: error
 
       # -------------------------------------------------------------------------------------------------------------------------
-      - name: "Upload DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.deb"
+      - name: 'Upload DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.deb'
         uses: actions/upload-artifact@v4.4.0
         if: ${{ matrix.os == 'ubuntu' }}
         with:
           path: packages/gui/dist_electron/DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.deb
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.deb"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.deb'
           if-no-files-found: error
-      - name: "Upload DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.AppImage"
+      - name: 'Upload DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.AppImage'
         uses: actions/upload-artifact@v4.4.0
         if: ${{ matrix.os == 'ubuntu' }}
         with:
           path: packages/gui/dist_electron/DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.AppImage
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.AppImage"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.AppImage'
           if-no-files-found: error
-      - name: "Upload DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.tar.gz"
+      - name: 'Upload DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.tar.gz'
         uses: actions/upload-artifact@v4.4.0
         if: ${{ matrix.os == 'ubuntu' }}
         with:
           path: packages/gui/dist_electron/DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.tar.gz
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.tar.gz"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.tar.gz'
           if-no-files-found: error
-      - name: "Upload DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.rpm"
+      - name: 'Upload DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.rpm'
         uses: actions/upload-artifact@v4.4.0
         if: ${{ matrix.os == 'ubuntu' }}
         with:
           path: packages/gui/dist_electron/DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.rpm
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.rpm"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.rpm'
           if-no-files-found: error
 
       # -------------------------------------------------------------------------------------------------------------------------
-      - name: "Upload DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.deb"
+      - name: 'Upload DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.deb'
         uses: actions/upload-artifact@v4.4.0
         if: ${{ matrix.os == 'ubuntu' }}
         with:
           path: packages/gui/dist_electron/DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.deb
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.deb"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.deb'
           if-no-files-found: error
-      - name: "Upload DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.AppImage"
+      - name: 'Upload DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.AppImage'
         uses: actions/upload-artifact@v4.4.0
         if: ${{ matrix.os == 'ubuntu' }}
         with:
           path: packages/gui/dist_electron/DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.AppImage
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.AppImage"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.AppImage'
           if-no-files-found: error
-      - name: "Upload DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.tar.gz"
+      - name: 'Upload DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.tar.gz'
         uses: actions/upload-artifact@v4.4.0
         if: ${{ matrix.os == 'ubuntu' }}
         with:
           path: packages/gui/dist_electron/DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.tar.gz
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.tar.gz"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.tar.gz'
           if-no-files-found: error
-      - name: "Upload DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.rpm"
+      - name: 'Upload DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.rpm'
         uses: actions/upload-artifact@v4.4.0
         if: ${{ matrix.os == 'ubuntu' }}
         with:
           path: packages/gui/dist_electron/DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.rpm
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.rpm"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.rpm'
           if-no-files-found: error
       # endregion Upload artifacts - Linux
 
       # region Upload artifacts - Linux ARM64
-      - name: "Upload DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.flatpak"
+      - name: 'Upload DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.flatpak'
         uses: actions/upload-artifact@v4.4.0
         if: ${{ matrix.os == 'ubuntu-24.04-arm' }}
         with:
           path: packages/gui/dist_electron/DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.flatpak
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.flatpak"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.flatpak'
           if-no-files-found: error
       # -------------------------------------------------------------------------------------------------------------------------
-      - name: "Upload DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.flatpak"
+      - name: 'Upload DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.flatpak'
         uses: actions/upload-artifact@v4.4.0
         if: ${{ matrix.os == 'ubuntu-24.04-arm' }}
         with:
           path: packages/gui/dist_electron/DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.flatpak
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.flatpak"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.flatpak'
           if-no-files-found: error
       # endregion Upload artifacts - Linux ARM64
 
       # Upload artifacts - macOS
-      - name: "Upload DevSidecar-${{ steps.package-info.outputs.version }}-macos-x86_64.dmg"
+      - name: 'Upload DevSidecar-${{ steps.package-info.outputs.version }}-macos-x86_64.dmg'
         uses: actions/upload-artifact@v4.4.0
         if: ${{ matrix.os == 'macos' }}
         with:
           path: packages/gui/dist_electron/DevSidecar-${{ steps.package-info.outputs.version }}-macos-x86_64.dmg
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-macos-x86_64.dmg"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-macos-x86_64.dmg'
           if-no-files-found: error
-      - name: "Upload DevSidecar-${{ steps.package-info.outputs.version }}-macos-arm64.dmg"
+      - name: 'Upload DevSidecar-${{ steps.package-info.outputs.version }}-macos-arm64.dmg'
         uses: actions/upload-artifact@v4.4.0
         if: ${{ matrix.os == 'macos' }}
         with:
           path: packages/gui/dist_electron/DevSidecar-${{ steps.package-info.outputs.version }}-macos-arm64.dmg
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-macos-arm64.dmg"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-macos-arm64.dmg'
           if-no-files-found: error
-      - name: "Upload DevSidecar-${{ steps.package-info.outputs.version }}-macos-universal.dmg"
+      - name: 'Upload DevSidecar-${{ steps.package-info.outputs.version }}-macos-universal.dmg'
         uses: actions/upload-artifact@v4.4.0
         if: ${{ matrix.os == 'macos' }}
         with:
           path: packages/gui/dist_electron/DevSidecar-${{ steps.package-info.outputs.version }}-macos-universal.dmg
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-macos-universal.dmg"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-macos-universal.dmg'
           if-no-files-found: error
 
   # job 2
@@ -438,10 +438,10 @@ jobs:
     needs:
       - build-and-upload
     steps:
-      - name: "Checkout"
+      - name: Checkout
         uses: actions/checkout@v4.1.7
 
-      - name: "Get package info"
+      - name: Get package info
         id: package-info
         uses: luizfelipelaviola/get-package-info@v1
         with:
@@ -451,111 +451,111 @@ jobs:
         run: mkdir release
 
       # Download artifacts
-      - name: "Download DevSidecar-${{ steps.package-info.outputs.version }}-windows-x86_64.exe"
+      - name: 'Download DevSidecar-${{ steps.package-info.outputs.version }}-windows-x86_64.exe'
         uses: actions/download-artifact@v4.1.8
         with:
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-windows-x86_64.exe"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-windows-x86_64.exe'
           path: release
-      - name: "Download DevSidecar-${{ steps.package-info.outputs.version }}-windows-ia32.exe"
+      - name: 'Download DevSidecar-${{ steps.package-info.outputs.version }}-windows-ia32.exe'
         uses: actions/download-artifact@v4.1.8
         with:
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-windows-ia32.exe"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-windows-ia32.exe'
           path: release
-      - name: "Download DevSidecar-${{ steps.package-info.outputs.version }}-windows-arm64.exe"
+      - name: 'Download DevSidecar-${{ steps.package-info.outputs.version }}-windows-arm64.exe'
         uses: actions/download-artifact@v4.1.8
         with:
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-windows-arm64.exe"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-windows-arm64.exe'
           path: release
       # -------------------------------------------------------------------------------------------------------------------------
-      - name: "Download DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.deb"
+      - name: 'Download DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.deb'
         uses: actions/download-artifact@v4.1.8
         with:
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.deb"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.deb'
           path: release
-      - name: "Download DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.AppImage"
+      - name: 'Download DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.AppImage'
         uses: actions/download-artifact@v4.1.8
         with:
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.AppImage"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.AppImage'
           path: release
-      - name: "Download DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.tar.gz"
+      - name: 'Download DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.tar.gz'
         uses: actions/download-artifact@v4.1.8
         with:
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.tar.gz"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.tar.gz'
           path: release
-      - name: "Download DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.rpm"
+      - name: 'Download DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.rpm'
         uses: actions/download-artifact@v4.1.8
         with:
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.rpm"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.rpm'
           path: release
-      #- name: "Download DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.flatpak"
+      # - name: "Download DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.flatpak"
       #  uses: actions/download-artifact@v4.1.8
       #  with:
       #    name: "DevSidecar-${{ steps.package-info.outputs.version }}-linux-x86_64.flatpak"
       #    path: release
       # -------------------------------------------------------------------------------------------------------------------------
-      - name: "Download DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.deb"
+      - name: 'Download DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.deb'
         uses: actions/download-artifact@v4.1.8
         with:
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.deb"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.deb'
           path: release
-      - name: "Download DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.AppImage"
+      - name: 'Download DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.AppImage'
         uses: actions/download-artifact@v4.1.8
         with:
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.AppImage"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.AppImage'
           path: release
-      - name: "Download DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.tar.gz"
+      - name: 'Download DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.tar.gz'
         uses: actions/download-artifact@v4.1.8
         with:
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.tar.gz"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.tar.gz'
           path: release
-      - name: "Download DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.rpm"
+      - name: 'Download DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.rpm'
         uses: actions/download-artifact@v4.1.8
         with:
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.rpm"
-          path: release
-      # -------------------------------------------------------------------------------------------------------------------------
-      - name: "Download DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.deb"
-        uses: actions/download-artifact@v4.1.8
-        with:
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.deb"
-          path: release
-      - name: "Download DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.AppImage"
-        uses: actions/download-artifact@v4.1.8
-        with:
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.AppImage"
-          path: release
-      - name: "Download DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.tar.gz"
-        uses: actions/download-artifact@v4.1.8
-        with:
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.tar.gz"
-          path: release
-      - name: "Download DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.rpm"
-        uses: actions/download-artifact@v4.1.8
-        with:
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.rpm"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-linux-arm64.rpm'
           path: release
       # -------------------------------------------------------------------------------------------------------------------------
-      - name: "Download DevSidecar-${{ steps.package-info.outputs.version }}-macos-x86_64.dmg"
+      - name: 'Download DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.deb'
         uses: actions/download-artifact@v4.1.8
         with:
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-macos-x86_64.dmg"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.deb'
           path: release
-      - name: "Download DevSidecar-${{ steps.package-info.outputs.version }}-macos-arm64.dmg"
+      - name: 'Download DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.AppImage'
         uses: actions/download-artifact@v4.1.8
         with:
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-macos-arm64.dmg"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.AppImage'
           path: release
-      - name: "Download DevSidecar-${{ steps.package-info.outputs.version }}-macos-universal.dmg"
+      - name: 'Download DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.tar.gz'
         uses: actions/download-artifact@v4.1.8
         with:
-          name: "DevSidecar-${{ steps.package-info.outputs.version }}-macos-universal.dmg"
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.tar.gz'
+          path: release
+      - name: 'Download DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.rpm'
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-linux-armv7l.rpm'
+          path: release
+      # -------------------------------------------------------------------------------------------------------------------------
+      - name: 'Download DevSidecar-${{ steps.package-info.outputs.version }}-macos-x86_64.dmg'
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-macos-x86_64.dmg'
+          path: release
+      - name: 'Download DevSidecar-${{ steps.package-info.outputs.version }}-macos-arm64.dmg'
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-macos-arm64.dmg'
+          path: release
+      - name: 'Download DevSidecar-${{ steps.package-info.outputs.version }}-macos-universal.dmg'
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: 'DevSidecar-${{ steps.package-info.outputs.version }}-macos-universal.dmg'
           path: release
 
       - name: 'Print files from "release" dir'
         run: |
           ls -lah release;
 
-      - name: "Create a draft release"
+      - name: Create a draft release
         uses: wangliang181230/github-action-ghr@master
         env:
           GITHUB_TOKEN: ${{ github.token }}

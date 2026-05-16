@@ -5,7 +5,7 @@ const MAX_AGE_RE = /max-age=(\d+)/i
 module.exports = {
   name: 'cacheResponse',
   priority: 202,
-  responseIntercept (context, interceptOpt, req, res, proxyReq, proxyRes, ssl, next) {
+  responseIntercept (context, interceptOpt, req, res, proxyReq, proxyRes, _ssl, _next) {
     const { rOptions, log } = context
 
     // 只有GET请求

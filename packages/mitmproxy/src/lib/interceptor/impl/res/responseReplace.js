@@ -69,7 +69,7 @@ module.exports = {
   name: 'responseReplace',
   priority: 203,
   replaceResponseHeaders,
-  responseIntercept (context, interceptOpt, req, res, proxyReq, proxyRes, ssl, next) {
+  responseIntercept (context, interceptOpt, req, res, proxyReq, proxyRes, _ssl, _next) {
     const { rOptions, log } = context
 
     if (proxyRes.statusCode !== 200) {
@@ -89,9 +89,7 @@ module.exports = {
       // 设置文件下载响应头
       replaceHeaders['content-disposition'] = `attachment; filename="${encodeURIComponent(filename)}"`
       // 设置文件类型
-      if (replaceHeaders['content-type'] == null) {
-        replaceHeaders['content-type'] = 'application/octet-stream'
-      }
+      replaceHeaders['content-type'] ??= 'application/octet-stream'
       // 如果未手动配置需要缓存，则不允许使用缓存
       const maxAge = cacheReq.getMaxAge(interceptOpt)
       if (maxAge == null || maxAge <= 0) {

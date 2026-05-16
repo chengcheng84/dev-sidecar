@@ -1,6 +1,6 @@
 const pluginConfig = require('./config')
 
-const Plugin = function (context) {
+function Plugin (context) {
   const { config, shell, event, log } = context
   const pluginApi = {
     async start () {
@@ -23,7 +23,7 @@ const Plugin = function (context) {
       return config.get().plugin.git.enabled
     },
 
-    async save (newConfig) {
+    async save (_newConfig) {
     },
 
     async setProxy (ip, port) {

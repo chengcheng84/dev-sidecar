@@ -1,7 +1,7 @@
 const pluginConfig = require('./config')
 
-const Plugin = function (context) {
-  const { config, shell, event, log } = context
+function Plugin (context) {
+  const { config } = context
   const api = {
     async start () {
       // event.fire('status', { key: 'plugin.overwall.enabled', value: true })

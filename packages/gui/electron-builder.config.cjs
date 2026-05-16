@@ -5,8 +5,9 @@ const publishProvider = process.env.VUE_APP_PUBLISH_PROVIDER
 module.exports = {
   appId: 'dev-sidecar',
   productName: 'dev-sidecar',
+  // eslint-disable-next-line no-template-curly-in-string
   artifactName: 'DevSidecar-${version}-${arch}.${ext}',
-  copyright: 'Copyright © 2020-' + new Date().getFullYear() + ' Greper, WangLiang, CuteOmega',
+  copyright: `Copyright © 2020-${new Date().getFullYear()} Greper, WangLiang, CuteOmega`,
   directories: {
     output: 'dist_electron',
     buildResources: 'build',

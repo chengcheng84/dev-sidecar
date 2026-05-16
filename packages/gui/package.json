@@ -1,15 +1,15 @@
 {
   "name": "@docmirror/dev-sidecar-gui",
+  "type": "module",
   "version": "2.1.0",
   "private": false,
-  "type": "module",
-  "main": "src/background.js",
   "author": {
     "email": "xiaojunnuo@qq.com",
     "name": "Greper"
   },
   "license": "MPL-2.0",
   "homepage": "https://github.com/docmirror/dev-sidecar",
+  "main": "src/background.js",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",

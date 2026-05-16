@@ -1,7 +1,7 @@
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue'
 
-import { PlusOutlined, MinusOutlined, SyncOutlined, CheckOutlined } from '@ant-design/icons-vue'
+import { CheckOutlined, MinusOutlined, PlusOutlined, SyncOutlined } from '@ant-design/icons-vue'
 import Plugin from '../../mixins/plugin'
 
 export default defineComponent({
@@ -74,7 +74,7 @@ export default defineComponent({
       this.config.plugin.git.setting.noProxyUrls = noProxyUrls
     },
   },
-});
+})
 </script>
 
 <template>
@@ -112,7 +112,9 @@ export default defineComponent({
                 <span><code>Git.exe</code>将不代理以下仓库；可以是根地址、组织/机构地址、完整地址</span>
               </a-col>
               <a-col :span="2">
-                <a-button type="primary" @click="addNoProxyUrl()"><PlusOutlined /></a-button>
+                <a-button type="primary" @click="addNoProxyUrl()">
+                  <PlusOutlined />
+                </a-button>
               </a-col>
             </a-row>
             <a-row v-for="(item, index) of noProxyUrls" ref="noProxyUrls" :key="index" :gutter="10">
@@ -120,7 +122,9 @@ export default defineComponent({
                 <a-input v-model:value="item.key" class="mt-2" spellcheck="false" />
               </a-col>
               <a-col :span="2">
-                <a-button type="danger" @click="delNoProxyUrl(item, index)"><MinusOutlined /></a-button>
+                <a-button type="danger" @click="delNoProxyUrl(item, index)">
+                  <MinusOutlined />
+                </a-button>
               </a-col>
             </a-row>
           </div>

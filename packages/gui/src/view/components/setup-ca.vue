@@ -1,8 +1,7 @@
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue'
 
 export default defineComponent({
-  emits: ['update:open', 'setup'],
   name: 'SetupCa',
 
   components: {
@@ -18,6 +17,7 @@ export default defineComponent({
       type: Boolean,
     },
   },
+  emits: ['update:open', 'setup'],
 
   data () {
     return {
@@ -45,7 +45,7 @@ export default defineComponent({
     async openExternal (url) {
       await this.$api.ipc.openExternal(url)
     },
-    afterVisibleChange (val) {
+    afterVisibleChange (_val) {
     },
     showDrawer () {
       this.$emit('update:open', true)
@@ -60,7 +60,7 @@ export default defineComponent({
       }
     },
   },
-});
+})
 </script>
 
 <template>
@@ -68,10 +68,10 @@ export default defineComponent({
     placement="right"
     :closable="false"
     :open="open"
-    @after-open-change="afterVisibleChange"
     width="660px"
     height="100%"
     wrap-class-name="json-wrapper"
+    @after-open-change="afterVisibleChange"
     @close="onClose"
   >
     <template #title>

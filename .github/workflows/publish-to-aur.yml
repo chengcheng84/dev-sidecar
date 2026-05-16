@@ -1,4 +1,4 @@
-name: "Publish To AUR"
+name: Publish To AUR
 
 on:
   release:
@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Package version to publish (e.g. 2.0.2). Leave empty to use the latest release tag."
+        description: Package version to publish (e.g. 2.0.2). Leave empty to use the latest release tag.
         required: false
         type: string
 
@@ -17,11 +17,11 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: "Checkout"
+      - name: Checkout
         uses: actions/checkout@v4.1.7
 
       # ── Resolve version ──────────────────────────────────────────────────────
-      - name: "Resolve version"
+      - name: Resolve version
         id: version
         run: |
           if [[ -n "${{ inputs.version }}" ]]; then
@@ -34,7 +34,7 @@ jobs:
           echo "Resolved version: ${VERSION}"
 
       # ── Download release assets and compute SHA256 checksums ─────────────────
-      - name: "Download Linux x86_64 tar.gz and compute SHA256"
+      - name: Download Linux x86_64 tar.gz and compute SHA256
         id: sha256_x86_64
         run: |
           VERSION="${{ steps.version.outputs.version }}"
@@ -45,7 +45,7 @@ jobs:
           echo "sha256=${SHA256}" >> "$GITHUB_OUTPUT"
           echo "x86_64 SHA256: ${SHA256}"
 
-      - name: "Download Linux aarch64 tar.gz and compute SHA256"
+      - name: Download Linux aarch64 tar.gz and compute SHA256
         id: sha256_aarch64
         run: |
           VERSION="${{ steps.version.outputs.version }}"
@@ -57,7 +57,7 @@ jobs:
           echo "aarch64 SHA256: ${SHA256}"
 
       # ── Update PKGBUILD ───────────────────────────────────────────────────────
-      - name: "Update PKGBUILD with new version and checksums"
+      - name: Update PKGBUILD with new version and checksums
         run: |
           VERSION="${{ steps.version.outputs.version }}"
           SHA256_X86_64="${{ steps.sha256_x86_64.outputs.sha256 }}"
@@ -79,7 +79,7 @@ jobs:
           cat "${PKGBUILD}"
 
       # ── Push to AUR via git + SSH ─────────────────────────────────────────────
-      - name: "Set up SSH key for AUR"
+      - name: Set up SSH key for AUR
         run: |
           install -dm700 ~/.ssh
 
@@ -95,11 +95,11 @@ jobs:
           printf 'Host aur.archlinux.org\n  IdentityFile ~/.ssh/aur_id\n  User aur\n' >> ~/.ssh/config
           chmod 600 ~/.ssh/config
 
-      - name: "Clone AUR repository"
+      - name: Clone AUR repository
         run: |
           git clone ssh://aur@aur.archlinux.org/dev-sidecar-bin.git /tmp/aur-dev-sidecar-bin
 
-      - name: "Copy PKGBUILD and generate .SRCINFO"
+      - name: Copy PKGBUILD and generate .SRCINFO
         run: |
           cp packages/aur/PKGBUILD /tmp/aur-dev-sidecar-bin/PKGBUILD
 
@@ -108,7 +108,7 @@ jobs:
           cd /tmp/aur-dev-sidecar-bin
           python3 "$GITHUB_WORKSPACE/packages/aur/gen_srcinfo.py"
 
-      - name: "Commit and push to AUR"
+      - name: Commit and push to AUR
         run: |
           cd /tmp/aur-dev-sidecar-bin
 

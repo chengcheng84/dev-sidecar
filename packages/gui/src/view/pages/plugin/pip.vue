@@ -1,14 +1,14 @@
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue'
 
-import { SyncOutlined, CheckOutlined } from '@ant-design/icons-vue'
+import { CheckOutlined, SyncOutlined } from '@ant-design/icons-vue'
 import Plugin from '../../mixins/plugin'
 
 export default defineComponent({
   name: 'Pip',
-  mixins: [Plugin],
 
   components: { SyncOutlined, CheckOutlined },
+  mixins: [Plugin],
 
   data () {
     return {
@@ -49,7 +49,7 @@ export default defineComponent({
       await this.apply()
     },
   },
-});
+})
 </script>
 
 <template>

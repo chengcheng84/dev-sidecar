@@ -28,7 +28,7 @@ function handleServerStartError (message, err, app, api) {
       onOk () {
         api.config.get().then((config) => {
           console.log('config:', config)
-          api.shell.killByPort({ port: config.server.port }).then((ret) => {
+          api.shell.killByPort({ port: config.server.port }).then(() => {
             app.config.globalProperties.$message.info('杀掉进程成功，请重试开启代理服务')
           })
         })

@@ -1,6 +1,6 @@
 <script>
-import { h } from 'vue';
-import * as Icons from '@ant-design/icons-vue';
+import { h } from 'vue'
+import * as Icons from '@ant-design/icons-vue'
 
 import { ipcRenderer } from 'electron'
 import createMenus from '@/view/router/menu'
@@ -10,7 +10,7 @@ import { colorTheme } from './composables/theme'
 export default {
   name: 'App',
 
-  data() {
+  data () {
     return {
       locale: zhCN,
       info: {
@@ -32,17 +32,17 @@ export default {
   },
 
   computed: {
-    themeClass() {
+    themeClass () {
       return `theme-${this.theme}`
     },
-    theme() {
+    theme () {
       return colorTheme.value
     },
     // 将菜单数据转换为 items 格式
-    menuItems() {
-      return (this.menus || []).map(item => {
+    menuItems () {
+      return (this.menus || []).map((item) => {
         const iconName = item.icon
-          ? item.icon.replace(/(^|-)(\w)/g, (_, _s, c) => c.toUpperCase()) + 'Outlined'
+          ? `${item.icon.replace(/(^|-)(\w)/g, (_, _s, c) => c.toUpperCase())}Outlined`
           : 'FileOutlined'
         const IconComponent = Icons[iconName]
 
@@ -51,9 +51,9 @@ export default {
             key: item.path,
             icon: () => h(IconComponent),
             label: item.title,
-            children: item.children.map(child => {
+            children: item.children.map((child) => {
               const childIconName = child.icon
-                ? child.icon.replace(/(^|-)(\w)/g, (_, _s, c) => c.toUpperCase()) + 'Outlined'
+                ? `${child.icon.replace(/(^|-)(\w)/g, (_, _s, c) => c.toUpperCase())}Outlined`
                 : 'FileOutlined'
               const ChildIconComponent = Icons[childIconName]
               return {
@@ -77,7 +77,7 @@ export default {
     },
   },
 
-  created() {
+  created () {
     this.menus = createMenus(this)
     this.configReadyPromise = this.refreshConfigAndInfo()
     ipcRenderer.on('config.changed', this.onConfigChanged)
@@ -95,7 +95,7 @@ export default {
 
       try {
         if (message.key === 'show-hide') { // 显示/隐藏
-          const hide = message.hideSearchBar != null ? message.hideSearchBar : !this.hideSearchBar
+          const hide = message.hideSearchBar ?? !this.hideSearchBar
 
           // 如果为隐藏操作，但SearchBar未隐藏且未获取焦点，则获取焦点
           if (hide && !this.hideSearchBar && !this.searchBarIsFocused) {
@@ -120,7 +120,7 @@ export default {
     })
   },
 
-  async mounted() {
+  async mounted () {
     if (this.configReadyPromise) {
       await this.configReadyPromise
     }
@@ -137,12 +137,12 @@ export default {
     this.updateSelectedKeys(this.$route.fullPath)
   },
 
-  beforeUnmount() {
+  beforeUnmount () {
     ipcRenderer.removeListener('config.changed', this.onConfigChanged)
   },
 
   methods: {
-    async refreshConfigAndInfo() {
+    async refreshConfigAndInfo () {
       try {
         const config = await this.$api.config.get()
         if (config) {
@@ -162,10 +162,10 @@ export default {
         console.error('刷新信息出现异常：', e)
       }
     },
-    async onConfigChanged() {
+    async onConfigChanged () {
       await this.refreshConfigAndInfo()
     },
-    updateSelectedKeys(currentPath) {
+    updateSelectedKeys (currentPath) {
       // 查找匹配的菜单项
       for (const item of this.menus || []) {
         if (item.children && item.children.length > 0) {
@@ -190,7 +190,7 @@ export default {
         }
       }
     },
-    handleMenuClick({ key }) {
+    handleMenuClick ({ key }) {
       console.log('menu click:', key)
       window.config.disableSearchBar = false
       // 找到对应的菜单项
@@ -211,10 +211,10 @@ export default {
         }
       }
     },
-    async openExternal(url) {
+    async openExternal (url) {
       await this.$api.ipc.openExternal(url)
     },
-    doSearchBarInputFocus() {
+    doSearchBarInputFocus () {
       this.$nextTick(() => {
         const searchBarInput = document.getElementById('search-bar-input')
         if (searchBarInput) {
@@ -222,24 +222,24 @@ export default {
         }
       })
     },
-    doSearchBarSearch(message, isPrevious) {
+    doSearchBarSearch (message, isPrevious) {
       this.$nextTick(() => {
         const searchBarInput = document.getElementById('search-bar-input')
         if (searchBarInput) {
           const event = new CustomEvent('search-bar-search', {
-            detail: { keyword: searchBarInput.value, isPrevious }
+            detail: { keyword: searchBarInput.value, isPrevious },
           })
           document.dispatchEvent(event)
         }
       })
     },
-    onSearchBarInput(value) {
+    onSearchBarInput (value) {
       const event = new CustomEvent('search-bar-input', {
-        detail: { keyword: value }
+        detail: { keyword: value },
       })
       document.dispatchEvent(event)
     },
-    onSearchBarInputKeyup(event) {
+    onSearchBarInputKeyup (event) {
       if (this.searchBarInputKeyupTimeout) {
         clearTimeout(this.searchBarInputKeyupTimeout)
       }
@@ -247,10 +247,10 @@ export default {
         this.onSearchBarInput(event.target.value)
       }, 300)
     },
-    onSearchBarFocus() {
+    onSearchBarFocus () {
       this.searchBarIsFocused = true
     },
-    onSearchBarBlur() {
+    onSearchBarBlur () {
       this.searchBarIsFocused = false
     },
   },
@@ -265,9 +265,9 @@ export default {
           <div class="logo" />
           <div class="aside">
             <a-menu
+              v-model:selected-keys="selectedKeys"
+              v-model:open-keys="openKeys"
               mode="inline"
-              v-model:selectedKeys="selectedKeys"
-              v-model:openKeys="openKeys"
               :items="menuItems"
               @click="handleMenuClick"
             />

@@ -133,7 +133,7 @@ module.exports = (serverConfig) => {
       request: serverConfig.compatible ? matchUtil.domainMapRegexply(serverConfig.compatible.request) : {},
     },
     middlewares,
-    sslConnectInterceptor: (req, cltSocket, head) => {
+    sslConnectInterceptor: (req, _cltSocket, _head) => {
       const hostname = req.url.split(':')[0]
 
       // 配置了白名单的域名，将跳过代理

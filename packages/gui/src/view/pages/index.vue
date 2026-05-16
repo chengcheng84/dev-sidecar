@@ -1,6 +1,6 @@
 <script>
 import lodash from 'lodash'
-import { CheckOutlined, CloseOutlined, ArrowRightOutlined } from '@ant-design/icons-vue'
+import { ArrowRightOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons-vue'
 import DsContainer from '../components/container'
 import SetupCa from '../components/setup-ca'
 
@@ -213,10 +213,10 @@ export default {
         return this.apiCall(btn, closeApi)
       }
     },
-    onServerClick (checked) {
-      return this.onSwitchClick(this.server, this.$api.server.start, this.$api.server.close, checked)
+    onServerClick (_checked) {
+      return this.onSwitchClick(this.server, this.$api.server.start, this.$api.server.close, _checked)
     },
-    start (checked) {
+    start (_checked) {
       this.apiCall(this.startup, this.$api.startup)
     },
     openSettings () {
@@ -239,7 +239,7 @@ export default {
     async openExternal (url) {
       await this.$api.ipc.openExternal(url)
     },
-    onShutdownTipClose (e) {
+    onShutdownTipClose (_e) {
       this.$confirm({
         title: '是否永久关闭该提示',
         okText: '我已知晓，不再提示',
@@ -260,7 +260,9 @@ export default {
     </template>
     <template #header-right>
       <a-button style="margin-right:10px" @click="openSetupCa">
-        <a-badge :count="_rootCaSetuped ? 0 : 1" dot>安装根证书</a-badge>
+        <a-badge :count="_rootCaSetuped ? 0 : 1" dot>
+          安装根证书
+        </a-badge>
       </a-button>
 
       <a-button
@@ -330,8 +332,12 @@ export default {
                   :checked="item.status()"
                   @change="item.doClick"
                 >
-                  <template #checkedChildren><CheckOutlined /></template>
-                  <template #unCheckedChildren><CloseOutlined /></template>
+                  <template #checkedChildren>
+                    <CheckOutlined />
+                  </template>
+                  <template #unCheckedChildren>
+                    <CloseOutlined />
+                  </template>
                 </a-switch>
               </a-tooltip>
             </a-form-item>
@@ -340,7 +346,7 @@ export default {
       </div>
     </div>
 
-    <SetupCa title="安装证书" v-model:open="setupCa.visible" @setup="handleCaSetuped" />
+    <SetupCa v-model:open="setupCa.visible" title="安装证书" @setup="handleCaSetuped" />
     <template #footer>
       <div v-if="!setting.overwall" class="star">
         <div class="donate">

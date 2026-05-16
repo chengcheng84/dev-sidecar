@@ -15,9 +15,7 @@ const execFile = Shell.execFile
 
 let config = null
 function loadConfig () {
-  if (config == null) {
-    config = require('../../../config-api.js')
-  }
+  config ??= require('../../../config-api.js')
 }
 
 function getDomesticDomainAllowListTmpFilePath () {

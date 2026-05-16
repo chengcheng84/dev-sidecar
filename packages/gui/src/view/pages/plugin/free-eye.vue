@@ -69,7 +69,7 @@ export default {
   mounted () {
     this.refreshResult()
   },
-  beforeDestroy () {
+  beforeUnmount () {
     if (this.unwatchStatus) {
       this.unwatchStatus()
     }
@@ -119,7 +119,7 @@ export default {
 
 <template>
   <ds-container>
-    <template slot="header">
+    <template #header>
       网络检测 (FreeEye)
     </template>
 
@@ -166,7 +166,7 @@ export default {
           :pagination="false"
           row-key="key"
         >
-          <template slot="status" slot-scope="text, record">
+          <template #status="text, record">
             <a-tag v-if="record.skipped" color="orange">
               已跳过
             </a-tag>
@@ -174,11 +174,11 @@ export default {
               已完成
             </a-tag>
           </template>
-          <template slot="duration" slot-scope="text, record">
+          <template #duration="text, record">
             <span v-if="!record.skipped && record.duration != null">{{ formatSeconds(record.duration) }}</span>
             <span v-else>-</span>
           </template>
-          <template slot="output" slot-scope="text, record">
+          <template #output="text, record">
             <pre class="summary-output">{{ record.output }}</pre>
           </template>
         </a-table>

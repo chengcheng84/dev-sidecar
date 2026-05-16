@@ -1,28 +1,38 @@
 import antfu from '@antfu/eslint-config'
 
-export default antfu(
+const config = await antfu({
+  vue: true,
+  rules: {
+    'style/brace-style': ['error', '1tbs'],
+    'style/space-before-function-paren': ['error', 'always'],
+    'import/newline-after-import': 'off',
+    'import/first': 'off',
+    'perfectionist/sort-imports': 'off',
+    'node/prefer-global/buffer': 'off',
+    'node/prefer-global/process': 'off',
+    'no-console': 'off',
+  },
+  ignores: [
+    '**/build/*',
+    '**/dist_electron',
+    '**/pac.js',
+    'packages/mitmproxy/test/**/*.mjs',
+    '**/.github/**',
+    '**/doc/**',
+  ],
+  formatters: {
+    css: true,
+    html: true,
+  },
+})
+
+export default [
+  ...config,
   {
-    vue: {
-      vueVersion: 2,
-    },
+    files: ['**/*.md'],
     rules: {
-      'style/brace-style': ['error', '1tbs'],
-      'style/space-before-function-paren': ['error', 'always'],
-      'import/newline-after-import': 'off',
-      'import/first': 'off',
-      'perfectionist/sort-imports': 'off',
-      'node/prefer-global/buffer': 'off',
-      'node/prefer-global/process': 'off',
-      'no-console': 'off',
-    },
-    ignores: [
-      '**/build/*',
-      '**/dist_electron',
-    ],
-    formatters: {
-      css: true,
-      html: true,
-      markdown: 'prettier',
+      'markdown/no-multiple-h1': 'off',
+      'markdown/require-alt-text': 'off',
     },
   },
-)
+]

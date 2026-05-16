@@ -1,9 +1,9 @@
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue'
 
 import _ from 'lodash'
 import { Vue3JsonEditor } from 'vue3-json-editor'
-import { CheckOutlined, InfoCircleOutlined, PlusOutlined, MinusOutlined, SyncOutlined, ReloadOutlined } from '@ant-design/icons-vue'
+import { CheckOutlined, InfoCircleOutlined, MinusOutlined, PlusOutlined, ReloadOutlined, SyncOutlined } from '@ant-design/icons-vue'
 import Plugin from '../mixins/plugin'
 
 export default defineComponent({
@@ -241,7 +241,7 @@ export default defineComponent({
       }
     },
   },
-});
+})
 </script>
 
 <template>
@@ -360,7 +360,9 @@ export default defineComponent({
                 <div>配置为<code>不代理</code>的域名不会通过代理</div>
               </a-col>
               <a-col span="3">
-                <a-button style="margin-left:8px" type="primary" @click="addWhiteList()"><PlusOutlined /></a-button>
+                <a-button style="margin-left:8px" type="primary" @click="addWhiteList()">
+                  <PlusOutlined />
+                </a-button>
               </a-col>
             </a-row>
             <a-row v-for="(item, index) of whiteList" ref="whiteList" :key="index" :gutter="10" style="margin-top: 5px">
@@ -375,7 +377,9 @@ export default defineComponent({
                 </a-select>
               </a-col>
               <a-col :span="3">
-                <a-button type="danger" @click="deleteWhiteList(item, index)"><MinusOutlined /></a-button>
+                <a-button type="danger" @click="deleteWhiteList(item, index)">
+                  <MinusOutlined />
+                </a-button>
               </a-col>
             </a-row>
           </div>
@@ -418,7 +422,9 @@ export default defineComponent({
                 <div>这里配置哪些域名需要通过国外DNS服务器获取IP进行访问</div>
               </a-col>
               <a-col span="3">
-                <a-button style="margin-left:8px" type="primary" @click="addDnsMapping()"><PlusOutlined /></a-button>
+                <a-button style="margin-left:8px" type="primary" @click="addDnsMapping()">
+                  <PlusOutlined />
+                </a-button>
               </a-col>
             </a-row>
             <a-row v-for="(item, index) of dnsMappings" ref="dnsMappings" :key="index" :gutter="10" style="margin-top: 5px">
@@ -440,7 +446,9 @@ export default defineComponent({
                 </a-select>
               </a-col>
               <a-col :span="3">
-                <a-button type="danger" @click="deleteDnsMapping(item, index)"><MinusOutlined /></a-button>
+                <a-button type="danger" @click="deleteDnsMapping(item, index)">
+                  <MinusOutlined />
+                </a-button>
               </a-col>
             </a-row>
           </div>
@@ -473,7 +481,9 @@ export default defineComponent({
                 以下域名在启动后立即进行测速，其他域名在第一次访问时才测速
               </a-col>
               <a-col :span="2">
-                <a-button style="margin-left:10px" type="primary" @click="addSpeedHostname()"><PlusOutlined /></a-button>
+                <a-button style="margin-left:10px" type="primary" @click="addSpeedHostname()">
+                  <PlusOutlined />
+                </a-button>
               </a-col>
             </a-row>
             <a-row v-for="(item, index) of getSpeedTestConfig().hostnameList" ref="hostnameList" :key="index" :gutter="10" style="margin-top: 5px">
@@ -481,7 +491,9 @@ export default defineComponent({
                 <a-input v-model:value="getSpeedTestConfig().hostnameList[index]" spellcheck="false" />
               </a-col>
               <a-col :span="2">
-                <a-button style="margin-left:10px" type="danger" @click="delSpeedHostname(item, index)"><MinusOutlined /></a-button>
+                <a-button style="margin-left:10px" type="danger" @click="delSpeedHostname(item, index)">
+                  <MinusOutlined />
+                </a-button>
               </a-col>
             </a-row>
 
@@ -498,10 +510,10 @@ export default defineComponent({
             </a-row>
 
             <a-row :gutter="20">
-              <a-col v-for="(item, key) of speedTestList" :key="key" span="12">
-                <a-card size="small" class="mt10" :title="key">
+              <a-col v-for="(item, testKey) of speedTestList" :key="testKey" span="12">
+                <a-card size="small" class="mt10" :title="testKey">
                   <template #extra>
-                    <a href="javascript:void(0)" :title="key" style="cursor:default">
+                    <a href="javascript:void(0)" :title="testKey" style="cursor:default">
                       <CheckOutlined v-if="item.alive.length > 0" />
                       <InfoCircleOutlined v-else />
                     </a>

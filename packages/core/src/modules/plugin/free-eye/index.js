@@ -7,7 +7,7 @@ import freeEyeConfig from './config.js'
 
 const PLUGIN_STATUS_KEY = 'plugin.free_eye'
 
-const FreeEyePlugin = function (context) {
+function FreeEyePlugin (context) {
   const { config, event, log } = context
   let lastResult = null
 
@@ -47,7 +47,7 @@ const FreeEyePlugin = function (context) {
         if (typeof item === 'object') {
           try {
             return JSON.stringify(item)
-          } catch (err) {
+          } catch {
             return String(item)
           }
         }

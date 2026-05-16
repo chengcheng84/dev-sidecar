@@ -55,12 +55,8 @@ function _loadFromFile (defaultConfig) {
     const fileStr = file.toString()
     try {
       config = jsonApi.parse(fileStr)
-      if (config.connect == null) {
-        config.connect = defaultConfig.connect
-      }
-      if (config.request == null) {
-        config.request = defaultConfig.request
-      }
+      config.connect ??= defaultConfig.connect
+      config.request ??= defaultConfig.request
     } catch (e) {
       log.error('解析 automaticCompatibleConfig.json 失败:', configPath, ', error:', e)
       return defaultConfig
@@ -93,9 +89,7 @@ module.exports = {
    */
   getConnectCompatibleConfig (hostname, port, manualCompatibleConfig = null) {
     let connectCompatibleConfig = manualCompatibleConfig == null ? null : matchUtil.matchHostname(manualCompatibleConfig.connect, `${hostname}:${port}`, 'getConnectCompatibleConfig')
-    if (connectCompatibleConfig == null) {
-      connectCompatibleConfig = _getConnectConfig(hostname, port)
-    }
+    connectCompatibleConfig ??= _getConnectConfig(hostname, port)
     return connectCompatibleConfig
   },
 
@@ -125,9 +119,7 @@ module.exports = {
    */
   getRequestCompatibleConfig (rOptions, manualCompatibleConfig = null) {
     let requestCompatibleConfig = manualCompatibleConfig == null ? null : matchUtil.matchHostname(manualCompatibleConfig.request, `${rOptions.hostname}:${rOptions.port}`, 'getRequestCompatibleConfig')
-    if (requestCompatibleConfig == null) {
-      requestCompatibleConfig = _getRequestConfig(rOptions.hostname, rOptions.port)
-    }
+    requestCompatibleConfig ??= _getRequestConfig(rOptions.hostname, rOptions.port)
     return requestCompatibleConfig
   },
 
